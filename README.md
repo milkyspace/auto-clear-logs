@@ -15,6 +15,10 @@
 ---
 
 ## Как использовать
+Запустить:
+sudo bash <(wget -qO- https://raw.githubusercontent.com/milkyspace/auto-clear-logs/refs/heads/main/setup_auto_clear_logs.sh)
+
+Либо
 
 1. Скачайте или скопируйте скрипт `setup_auto_clear_logs.sh`.
 2. Сделайте его исполняемым:
