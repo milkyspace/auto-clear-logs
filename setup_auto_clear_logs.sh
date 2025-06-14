@@ -1,30 +1,53 @@
 #!/bin/bash
 
 # Запрос папки у пользователя
-read -p "Введите путь к папке, в которой нужно очищать логи: " LOG_DIR
+read -p "Введите путь к папке с логами: " LOG_DIR
 
-# Проверка, существует ли папка
+# Проверка существования папки
 if [ ! -d "$LOG_DIR" ]; then
   echo "Папка не найдена: $LOG_DIR"
   exit 1
 fi
 
+# Запрос интервала удаления
+echo "Как часто нужно удалять логи?"
+echo "1) Каждый день"
+echo "2) Каждые 2 дня"
+echo "3) Кажую неделю"
+read -p "Выберите вариант (1-3): " INTERVAL_CHOICE
+
+# Определение cron-выражения по выбору
+case "$INTERVAL_CHOICE" in
+  1)
+    CRON_SCHEDULE="0 3 * * *"          # Каждый день в 3 часа ночи
+    ;;
+  2)
+    CRON_SCHEDULE="0 3 */2 * *"        # Каждые 2 дня в 3 часа ночи
+    ;;
+  3)
+    CRON_SCHEDULE="0 3 * 0"            # Каждую неделю в воскресенье в 3 часа ночи
+    ;;
+  *)
+    echo "Некорректный выбор, по умолчанию выбран вариант 'каждые 2 дня'."
+    CRON_SCHEDULE="0 3 */2 * *"
+    ;;
+esac
+
 # Путь к скрипту
 SCRIPT_PATH="/usr/local/bin/auto_clear_logs.sh"
 
-# Создаем скрипт
+# Создаем скрипт очистки логов
 cat << EOF > "$SCRIPT_PATH"
 #!/bin/bash
-# Скрипт для удаления логов в указанной папке
-find "/var/lib/marzban-node" -type f -name "*.log" -delete
+find "$LOG_DIR" -type f -name "*.log" -delete
 EOF
 
-# Делаем скрипт исполняемым
+# Делаем его исполняемым
 chmod +x "$SCRIPT_PATH"
 
-# Проверяем, есть ли уже задача в crontab
+# Проверка наличия задачи в crontab
 (crontab -l 2>/dev/null | grep -F "$SCRIPT_PATH") && echo "Задача уже добавлена." || {
-    # Добавляем задачу в crontab
-    (crontab -l 2>/dev/null; echo "0 3 */2 * * $SCRIPT_PATH") | crontab -
-    echo "Задача добавлена в cron: запуск каждые два дня в 3 часа ночи."
+  # Добавляем задачу
+  (crontab -l 2>/dev/null; echo "$CRON_SCHEDULE $SCRIPT_PATH") | crontab -
+  echo "Задача добавлена в cron для автоматического удаления логов."
 }
