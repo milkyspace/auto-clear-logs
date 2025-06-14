@@ -15,8 +15,8 @@ SCRIPT_PATH="/usr/local/bin/auto_clear_logs.sh"
 # Создаем скрипт
 cat << EOF > "$SCRIPT_PATH"
 #!/bin/bash
-# Скрипт для очистки логов в указанной папке
-find "$LOG_DIR" -type f -name "*.log" -exec truncate -s 0 {} \;
+# Скрипт для удаления логов в указанной папке
+find "/var/lib/marzban-node" -type f -name "*.log" -delete
 EOF
 
 # Делаем скрипт исполняемым
