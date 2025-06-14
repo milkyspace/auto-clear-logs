@@ -18,14 +18,10 @@
 
 1. Скачайте или скопируйте скрипт `setup_auto_clear_logs.sh`.
 2. Сделайте его исполняемым:
-Copy
-bash
-chmod +x setupautoclearlogs.sh
+chmod +x setup_auto_clear_logs.sh.
 
 3. Запустите от имени суперпользователя:
-Copy
-bash
-sudo ./setupautoclearlogs.sh
+sudo ./setup_auto_clear_logs.sh.
 
 4. Следуйте инструкциям в терминале — введите путь к папке с логами.
 
