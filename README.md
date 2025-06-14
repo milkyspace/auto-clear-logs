@@ -17,7 +17,7 @@
 ## Как использовать
 Запустить:
 ```console
-sudo bash <(wget -qO- https://raw.githubusercontent.com/milkyspace/auto-clear-logs/refs/heads/main/setup_auto_clear_logs.sh)
+bash <(wget -qO- https://raw.githubusercontent.com/milkyspace/auto-clear-logs/refs/heads/main/setup_auto_clear_logs.sh)
 ```
 
 Либо
